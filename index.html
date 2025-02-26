@@ -1,41 +1,122 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-  <head>
-    <!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-T9LRD3M2');</script>
-<!-- End Google Tag Manager -->
-    <meta charset="utf-8">
-    <script type="text/javascript" src="ble.js">
-    </script>
-    <link rel="stylesheet" href="shoes.css">
-    <title>PikaShoes</title>
-  </head>
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZY41GB0EMW"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+<head>
+  <meta charset="utf-8">
+  <script type="text/javascript" src="ble.js"></script>
+  <title>e.co.footprint</title>
 
-  gtag('config', 'G-ZY41GB0EMW');
-</script>
-  <body>
-    <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T9LRD3M2"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
-    <div id="header">
-      <button id="ct"><a href="connecting.html">start</a></button>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Google Tag Manager -->
+  <script>
+    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});
+    var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
+    j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-T9LRD3M2');
+  </script>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZY41GB0EMW"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-ZY41GB0EMW');
+  </script>
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+      color: #2e7d32;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      margin: 0; padding: 0; box-sizing: 
+    }
+
+    #header {
+      height: 60px;
+      background: #2e7d32;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      padding: 0 20px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    #ct {
+      height: 40px;
+      width: 120px;
+      background: #4caf50;
+      border: none;
+      border-radius: 20px;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      text-align: center;
+      line-height: 40px;
+      transition: background 0.3s ease;
+    }
+    #ct:hover { background: #388e3c; }
+    #ct a { color: white; text-decoration: none; }
+
+    main {
+      text-align: center;
+      padding: 40px 20px;
+    }
+    main h1 {
+      font-size: 36px;
+      margin-bottom: 20px;
+    }
+    main p {
+      font-size: 18px;
+      color: #388e3c;
+    }
+
+    footer {
+      background: #2e7d32;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      font-size: 14px;
+    }
+    footer a {
+      color: white;
+      text-decoration: none;
+      margin: 0 10px;
+    }
+    footer img {
+      width: 40px;
+      height: 40px;
+      vertical-align: middle;
+      transition: transform 0.3s ease;
+    }
+    footer img:hover { transform: scale(1.1); }
+  </style>
+</head>
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T9LRD3M2" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+  <div id="header">
+    <button id="ct"><a href="connecting.html">Start</a></button>
+  </div>
+
+  <main>
+    <h1>Welcome to PikaShoes</h1>
+    <p>Track your eco-friendly walks with our sustainable shoe companion.</p>
+  </main>
+
+  <footer>
+    <div>
+      <a href="https://www.instagram.com/pikashoe.spyc_2425/?utm_source=ig_web_button_share_sheet" target="_blank">
+        <img src="https://i.postimg.cc/ZqxXdtL6/rb-2227.png" alt="Instagram">
+      </a>
     </div>
-    <footer id="footer">
-      <div>
-        <a href="https://www.instagram.com/pikashoe.spyc_2425/?utm_source=ig_web_button_share_sheet" target="_blank"><img src="https://i.postimg.cc/ZqxXdtL6/rb-2227.png" alt="954290-2227" border="0" style="width: 50px; height: 50px;"></a>
-      </div>
-      <p style="text-align:center;">Copyright © 2024 by Hufung</p>
-    </footer>
-  </body>
+    <p>Copyright © 2024 by Hufung</p>
+  </footer>
+</body>
 </html>
