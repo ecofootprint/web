@@ -7,8 +7,13 @@
     <link rel="stylesheet" href="ct.css">
     <title>PikaShoes</title>
     <!-- map -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
-    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+    #map { height: 400px; }
+    #controls { margin-top: 10px; text-align: center; }
+    button { padding: 10px 20px; margin: 5px; }
+    p { margin: 10px 0; }
+  </style>
     <!-- end map-->
     <!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -31,11 +36,109 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <button id="hm"><a href="index.html">Home</a></button>
     </div>
     <div id="map"></div>
+  <div id="controls">
+    <button id="startBtn">Start Walk</button>
+    <button id="stopBtn" disabled>Stop Walk</button>
+    <p id="status">Click "Start Walk" to begin tracking your route.</p>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+  <script>
+    let map;
+    let routePoints = [];
+    let polyline;
+    let startMarker;
+    let currentMarker;
+    let watchId;
+
+    const startBtn = document.getElementById('startBtn');
+    const stopBtn = document.getElementById('stopBtn');
+    const status = document.getElementById('status');
+
+    // Check if geolocation is supported
+    if (!navigator.geolocation) {
+      status.textContent = 'Geolocation is not supported by your browser.';
+      startBtn.disabled = true;
+    } else {
+      startBtn.addEventListener('click', startWalk);
+      stopBtn.addEventListener('click', stopWalk);
+    }
+
+    function startWalk() {
+      // Clear previous map if it exists
+      if (map) {
+        map.remove();
+        map = null;
+      }
+      status.textContent = 'Locating…';
+      startBtn.disabled = true;
+
+      // Get initial position
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const lat = position.coords.latitude;
+          const lon = position.coords.longitude;
+          const initialPoint = L.latLng(lat, lon);
+          routePoints = [initialPoint];
+
+          // Initialize the map
+          map = L.map('map').setView(initialPoint, 15);
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+          }).addTo(map);
+
+          // Add start marker and polyline
+          startMarker = L.marker(initialPoint).addTo(map).bindPopup('Start');
+          polyline = L.polyline(routePoints, { color: 'blue' }).addTo(map);
+          currentMarker = L.marker(initialPoint).addTo(map);
+
+          // Start tracking position
+          watchId = navigator.geolocation.watchPosition(
+            (pos) => {
+              const newPoint = L.latLng(pos.coords.latitude, pos.coords.longitude);
+              routePoints.push(newPoint);
+              polyline.setLatLngs(routePoints);
+              currentMarker.setLatLng(newPoint);
+              map.setView(newPoint);
+            },
+            (err) => {
+              console.error(err);
+              status.textContent = 'Unable to retrieve your location.';
+            },
+            { enableHighAccuracy: true, maximumAge: 10000, timeout: 10000 }
+          );
+
+          stopBtn.disabled = false;
+          status.textContent = 'Tracking your walk...';
+        },
+        (err) => {
+          console.error(err);
+          status.textContent = 'Unable to retrieve your location. Please allow location access.';
+          startBtn.disabled = false;
+        },
+        { enableHighAccuracy: true }
+      );
+    }
+
+    function stopWalk() {
+      // Stop tracking
+      if (watchId) {
+        navigator.geolocation.clearWatch(watchId);
+        watchId = null;
+      }
+      if (routePoints.length > 0) {
+        const endPoint = routePoints[routePoints.length - 1];
+        L.marker(endPoint).addTo(map).bindPopup('End');
+        map.fitBounds(polyline.getBounds());
+      }
+      stopBtn.disabled = true;
+      startBtn.disabled = false;
+      status.textContent = 'Your walk route is displayed above.';
+    }
+  </script>
     <button onClick='disconnect()'>disconnect</button>
     <button onclick="storge()">Store</button>
     <input type="text" id="rn" name="rn" placeholder="Enter The Title">
-    <button id="startBtn">Start Tracking</button>
-    <button id="stopBtn" disabled>Stop Tracking</button>
     <footer><p style="text-align:center;">Copyright © 2024 by Hufung</p></footer>
   </body>
 </html>
