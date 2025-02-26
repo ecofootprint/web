@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <script type="text/javascript" src="ble.js">
+    </script>
+    <link rel="stylesheet" href="ct.css">
+    <title>PikaShoes</title>
+    <!-- map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+    <!-- end map-->
+    <!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-T9LRD3M2');</script>
+<!-- End Google Tag Manager -->
+  </head>
+  <body>
+    <!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T9LRD3M2"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+    <div id="header">
+      <button onClick='connect()' id="ct">
+      <img src="https://hufung17.github.io/image/connet.svg" style="float:left;width:100px;height:45px;text-align: center;" alt="bluetooth">
+      </button>
+      <button id="gd" onclick="location.href='showdata.html'"></button>
+      <button id="hm"><a href="index.html">Home</a></button>
+    </div>
+    <div id="map"></div>
+    <button onClick='disconnect()'>disconnect</button>
+    <button onclick="storge()">Store</button>
+    <input type="text" id="rn" name="rn" placeholder="Enter The Title">
+    <button id="startBtn">Start Tracking</button>
+    <button id="stopBtn" disabled>Stop Tracking</button>
+    <footer><p style="text-align:center;">Copyright © 2024 by Hufung</p></footer>
+  </body>
+</html>
