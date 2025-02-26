@@ -1,38 +1,118 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <script type="text/javascript" src="ble.js">
-    </script>
-    <link rel="stylesheet" href="ct.css">
-    <title>PikaShoes</title>
-    <!-- map -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <style>
-    #map { height: 400px; }
-    #controls { margin-top: 10px; text-align: center; }
+<head>
+  <meta charset="utf-8">
+  <script type="text/javascript" src="ble.js"></script>
+  <title>E.CO.Footprint</title></title>
+
+  <!-- Leaflet CSS for Map -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Google Tag Manager -->
+  <script>
+    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});
+    var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
+    j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-T9LRD3M2');
+  </script>
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+      color: #2e7d32;
+      line-height: 1.6;
+      margin: 0; padding: 0; box-sizing:
+    }
+
+    #header {
+      height: 60px;
+      background: #2e7d32;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      padding: 0 20px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    #ct, #hm {
+      height: 40px;
+      width: 120px;
+      background: #4caf50;
+      border: none;
+      border-radius: 20px;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      margin-left: 10px;
+      text-align: center;
+      line-height: 40px;
+      transition: background 0.3s ease;
+    }
+    #ct:hover, #hm:hover { background: #388e3c; }
+    #ct img { width: 30px; height: 30px; vertical-align: middle; }
+    #hm a { color: white; text-decoration: none; }
+
+    #map { height: 400px; width: 100%; max-width: 800px; margin: 20px auto; border-radius: 10px; }
+
+    #controls {
+      text-align: center;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 10px;
+      max-width: 800px;
+      margin: 0 auto 20px;
+    }
+    #controls button, #saveBtn, #loadBtn {
+      padding: 10px 20px;
+      background: #4caf50;
+      border: none;
+      border-radius: 20px;
+      color: white;
+      font-size: 14px;
+      cursor: pointer;
+      margin: 5px;
+      transition: background 0.3s ease;
+    }
+    #controls button:hover, #saveBtn:hover, #loadBtn:hover { background: #388e3c; }
+    #controls button:disabled { background: #a5d6a7; cursor: not-allowed; }
+    #routeName, #savedRoutes {
+      padding: 8px;
+      border: 1px solid #a5d6a7;
+      border-radius: 5px;
+      margin: 5px;
+      background: white;
+      color: #2e7d32;
+    }
+    #status { margin-top: 10px; color: #388e3c; font-weight: 600; }
+
+    footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: #2e7d32;
+      color: white;
+      text-align: center;
+      padding: 10px 0;
+      font-size: 14px;
+    }
   </style>
-    <!-- end map-->
-    <!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-T9LRD3M2');</script>
-<!-- End Google Tag Manager -->
-  </head>
-  <body>
-    <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T9LRD3M2"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
-    <div id="header">
-      <button onClick='connect()' id="ct">
-      <img src="https://hufung17.github.io/image/connet.svg" style="float:left;width:100px;height:45px;text-align: center;" alt="bluetooth">
-      </button>
-      <button id="hm"><a href="index.html">Home</a></button>
-    </div>
-    <div id="map"></div>
+</head>
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T9LRD3M2" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+  <div id="header">
+    <button onclick="connect()" id="ct">
+      <img src="https://hufung17.github.io/image/connet.svg" alt="bluetooth">
+    </button>
+    <button id="hm"><a href="index.html">Home</a></button>
+  </div>
+
+  <div id="map"></div>
+
   <div id="controls">
     <button id="startBtn">Start Walk</button>
     <button id="stopBtn" disabled>Stop Walk</button>
@@ -45,15 +125,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <p id="status">Click "Start Walk" to begin tracking your route.</p>
   </div>
 
+  <footer><p>Copyright © 2024 by Hufung</p></footer>
+
   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
   <script>
-    let map;
-    let routePoints = [];
-    let polyline;
-    let startMarker;
-    let currentMarker;
-    let watchId;
-
+    let map, routePoints = [], polyline, startMarker, currentMarker, watchId;
     const startBtn = document.getElementById('startBtn');
     const stopBtn = document.getElementById('stopBtn');
     const routeNameInput = document.getElementById('routeName');
@@ -62,7 +138,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     const loadBtn = document.getElementById('loadBtn');
     const status = document.getElementById('status');
 
-    // Check if geolocation is supported
     if (!navigator.geolocation) {
       status.textContent = 'Geolocation is not supported by your browser.';
       startBtn.disabled = true;
@@ -73,14 +148,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       loadBtn.addEventListener('click', loadRoute);
     }
 
-    // List saved routes on page load
     document.addEventListener('DOMContentLoaded', listSavedRoutes);
 
     function startWalk() {
-      if (map) {
-        map.remove();
-        map = null;
-      }
+      if (map) { map.remove(); map = null; }
       routePoints = [];
       routeNameInput.style.display = 'none';
       saveBtn.style.display = 'none';
@@ -101,7 +172,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           }).addTo(map);
 
           startMarker = L.marker(initialPoint).addTo(map).bindPopup('Start');
-          polyline = L.polyline(routePoints, { color: 'blue' }).addTo(map);
+          polyline = L.polyline(routePoints, { color: '#388e3c' }).addTo(map);
           currentMarker = L.marker(initialPoint).addTo(map);
 
           watchId = navigator.geolocation.watchPosition(
@@ -112,10 +183,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               currentMarker.setLatLng(newPoint);
               map.setView(newPoint);
             },
-            (err) => {
-              console.error(err);
-              status.textContent = 'Unable to retrieve your location.';
-            },
+            (err) => { status.textContent = 'Unable to retrieve your location.'; },
             { enableHighAccuracy: true, maximumAge: 10000, timeout: 10000 }
           );
 
@@ -123,7 +191,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           status.textContent = 'Tracking your walk...';
         },
         (err) => {
-          console.error(err);
           status.textContent = 'Unable to retrieve your location. Please allow location access.';
           startBtn.disabled = false;
         },
@@ -132,10 +199,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     }
 
     function stopWalk() {
-      if (watchId) {
-        navigator.geolocation.clearWatch(watchId);
-        watchId = null;
-      }
+      if (watchId) { navigator.geolocation.clearWatch(watchId); watchId = null; }
       if (routePoints.length > 0) {
         const endPoint = routePoints[routePoints.length - 1];
         L.marker(endPoint).addTo(map).bindPopup('End');
@@ -150,10 +214,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     function saveRoute() {
       const routeName = routeNameInput.value.trim();
-      if (!routeName) {
-        alert('Please enter a name for the route.');
-        return;
-      }
+      if (!routeName) { alert('Please enter a name for the route.'); return; }
       const routeData = JSON.stringify(routePoints.map(point => ({ lat: point.lat, lng: point.lng })));
       localStorage.setItem(`route_${routeName}`, routeData);
       routeNameInput.value = '';
@@ -179,21 +240,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     function loadRoute() {
       const selectedRoute = savedRoutesSelect.value;
-      if (!selectedRoute) {
-        alert('Please select a route to load.');
-        return;
-      }
+      if (!selectedRoute) { alert('Please select a route to load.'); return; }
       const routeData = localStorage.getItem(`route_${selectedRoute}`);
       if (routeData) {
         const loadedPoints = JSON.parse(routeData).map(point => L.latLng(point.lat, point.lng));
-        if (map) {
-          map.remove();
-        }
+        if (map) { map.remove(); }
         map = L.map('map').setView(loadedPoints[0], 15);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           attribution: '© OpenStreetMap contributors'
         }).addTo(map);
-        L.polyline(loadedPoints, { color: 'blue' }).addTo(map);
+        L.polyline(loadedPoints, { color: '#388e3c' }).addTo(map);
         L.marker(loadedPoints[0]).addTo(map).bindPopup('Start');
         L.marker(loadedPoints[loadedPoints.length - 1]).addTo(map).bindPopup('End');
         map.fitBounds(L.polyline(loadedPoints).getBounds());
@@ -203,6 +259,5 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       }
     }
   </script>
-    <footer><p style="text-align:center;">Copyright © 2024 by Hufung</p></footer>
-  </body>
+</body>
 </html>
