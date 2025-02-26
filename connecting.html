@@ -37,6 +37,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div id="controls">
     <button id="startBtn">Start Walk</button>
     <button id="stopBtn" disabled>Stop Walk</button>
+    <input type="text" id="routeName" placeholder="Route Name" style="display:none;">
+    <button id="saveBtn" style="display:none;">Save Route</button>
+    <select id="savedRoutes">
+      <option value="">-- Select a saved route --</option>
+    </select>
+    <button id="loadBtn">Load Route</button>
     <p id="status">Click "Start Walk" to begin tracking your route.</p>
   </div>
 
@@ -51,6 +57,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     const startBtn = document.getElementById('startBtn');
     const stopBtn = document.getElementById('stopBtn');
+    const routeNameInput = document.getElementById('routeName');
+    const saveBtn = document.getElementById('saveBtn');
+    const savedRoutesSelect = document.getElementById('savedRoutes');
+    const loadBtn = document.getElementById('loadBtn');
     const status = document.getElementById('status');
 
     // Check if geolocation is supported
@@ -60,18 +70,25 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     } else {
       startBtn.addEventListener('click', startWalk);
       stopBtn.addEventListener('click', stopWalk);
+      saveBtn.addEventListener('click', saveRoute);
+      loadBtn.addEventListener('click', loadRoute);
     }
 
+    // List saved routes on page load
+    document.addEventListener('DOMContentLoaded', listSavedRoutes);
+
     function startWalk() {
-      // Clear previous map if it exists
       if (map) {
         map.remove();
         map = null;
       }
+      routePoints = [];
+      routeNameInput.style.display = 'none';
+      saveBtn.style.display = 'none';
+      savedRoutesSelect.value = '';
       status.textContent = 'Locating…';
       startBtn.disabled = true;
 
-      // Get initial position
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const lat = position.coords.latitude;
@@ -79,18 +96,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           const initialPoint = L.latLng(lat, lon);
           routePoints = [initialPoint];
 
-          // Initialize the map
           map = L.map('map').setView(initialPoint, 15);
           L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
           }).addTo(map);
 
-          // Add start marker and polyline
           startMarker = L.marker(initialPoint).addTo(map).bindPopup('Start');
           polyline = L.polyline(routePoints, { color: 'blue' }).addTo(map);
           currentMarker = L.marker(initialPoint).addTo(map);
 
-          // Start tracking position
           watchId = navigator.geolocation.watchPosition(
             (pos) => {
               const newPoint = L.latLng(pos.coords.latitude, pos.coords.longitude);
@@ -119,7 +133,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     }
 
     function stopWalk() {
-      // Stop tracking
       if (watchId) {
         navigator.geolocation.clearWatch(watchId);
         watchId = null;
@@ -131,7 +144,64 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       }
       stopBtn.disabled = true;
       startBtn.disabled = false;
-      status.textContent = 'Your walk route is displayed above.';
+      routeNameInput.style.display = 'inline';
+      saveBtn.style.display = 'inline';
+      status.textContent = 'Enter a name and click "Save Route" to save your walk.';
+    }
+
+    function saveRoute() {
+      const routeName = routeNameInput.value.trim();
+      if (!routeName) {
+        alert('Please enter a name for the route.');
+        return;
+      }
+      const routeData = JSON.stringify(routePoints.map(point => ({ lat: point.lat, lng: point.lng })));
+      localStorage.setItem(`route_${routeName}`, routeData);
+      routeNameInput.value = '';
+      routeNameInput.style.display = 'none';
+      saveBtn.style.display = 'none';
+      status.textContent = 'Route saved successfully.';
+      listSavedRoutes();
+    }
+
+    function listSavedRoutes() {
+      savedRoutesSelect.innerHTML = '<option value="">-- Select a saved route --</option>';
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key.startsWith('route_')) {
+          const routeName = key.substring(6);
+          const option = document.createElement('option');
+          option.value = routeName;
+          option.textContent = routeName;
+          savedRoutesSelect.appendChild(option);
+        }
+      }
+    }
+
+    function loadRoute() {
+      const selectedRoute = savedRoutesSelect.value;
+      if (!selectedRoute) {
+        alert('Please select a route to load.');
+        return;
+      }
+      const routeData = localStorage.getItem(`route_${selectedRoute}`);
+      if (routeData) {
+        const loadedPoints = JSON.parse(routeData).map(point => L.latLng(point.lat, point.lng));
+        if (map) {
+          map.remove();
+        }
+        map = L.map('map').setView(loadedPoints[0], 15);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+        L.polyline(loadedPoints, { color: 'blue' }).addTo(map);
+        L.marker(loadedPoints[0]).addTo(map).bindPopup('Start');
+        L.marker(loadedPoints[loadedPoints.length - 1]).addTo(map).bindPopup('End');
+        map.fitBounds(L.polyline(loadedPoints).getBounds());
+        status.textContent = `Loaded route: ${selectedRoute}`;
+      } else {
+        status.textContent = 'Failed to load route.';
+      }
     }
   </script>
     <button onClick='disconnect()'>disconnect</button>
