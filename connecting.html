@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Added viewport meta tag -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script type="text/javascript" src="ble.js"></script>
   <title>E.CO.Footprint</title>
 
@@ -36,14 +36,21 @@
       height: 60px;
       background: #2e7d32;
       display: flex;
-      justify-content: flex-end;
+      justify-content: space-between; /* Changed to space-between for title and buttons */
       align-items: center;
       padding: 0 10px;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-      flex-wrap: wrap; /* Allow wrapping on small screens */
+      flex-wrap: wrap;
+    }
+    #header h1 {
+      color: white;
+      font-size: 20px; /* Adjusted for readability */
+      margin: 0;
+      padding-left: 10px;
+      font-weight: 600;
     }
     #ct, #hm {
-      height: 48px; /* Increased for touch-friendliness */
+      height: 48px;
       width: 130px;
       background: #4caf50;
       border: none;
@@ -51,7 +58,7 @@
       color: white;
       font-size: 16px;
       cursor: pointer;
-      margin: 5px; /* Adjusted spacing */
+      margin: 5px;
       text-align: center;
       line-height: 48px;
       transition: background 0.3s ease;
@@ -61,9 +68,9 @@
     #hm a { color: white; text-decoration: none; display: block; }
 
     #map { 
-      height: 50vh; /* Use viewport height for responsiveness */
+      height: 50vh;
       width: 100%; 
-      max-width: 100%; /* Remove fixed max-width */
+      max-width: 100%;
       margin: 20px auto; 
       border-radius: 10px; 
     }
@@ -75,16 +82,16 @@
       border-radius: 10px;
       margin: 0 10px 20px;
       display: flex;
-      flex-direction: column; /* Stack controls vertically */
-      gap: 10px; /* Add spacing between elements */
+      flex-direction: column;
+      gap: 10px;
     }
     #controls button, #saveBtn, #loadBtn {
-      padding: 12px 24px; /* Larger padding for touch */
+      padding: 12px 24px;
       background: #4caf50;
       border: none;
       border-radius: 10px;
       color: white;
-      font-size: 16px; /* Larger font */
+      font-size: 16px;
       cursor: pointer;
       transition: background 0.3s ease;
     }
@@ -96,8 +103,8 @@
       border-radius: 5px;
       background: white;
       color: #2e7d32;
-      font-size: 16px; /* Larger font */
-      width: 100%; /* Full width on mobile */
+      font-size: 16px;
+      width: 100%;
       box-sizing: border-box;
     }
     #status { 
@@ -115,32 +122,38 @@
       color: white;
       text-align: center;
       padding: 10px 0;
-      font-size: 16px; /* Larger font for readability */
+      font-size: 16px;
     }
 
     /* Media Queries for Mobile */
     @media (max-width: 600px) {
       #header {
-        justify-content: center; /* Center buttons on small screens */
+        justify-content: center;
         height: auto;
         padding: 10px;
       }
+      #header h1 {
+        font-size: 18px; /* Slightly smaller on mobile */
+        width: 100%; /* Full width on small screens */
+        text-align: center;
+        padding: 5px 0;
+      }
       #ct, #hm {
-        width: 45%; /* Slightly smaller width */
+        width: 45%;
         margin: 5px;
       }
       #map { 
-        height: 40vh; /* Reduce height slightly on smaller screens */
+        height: 40vh;
       }
       #controls {
         padding: 10px;
       }
       #controls button, #saveBtn, #loadBtn {
-        font-size: 14px; /* Slightly smaller but still legible */
+        font-size: 14px;
         padding: 10px 20px;
       }
       #status {
-        font-size: 12px; /* Adjust status text */
+        font-size: 12px;
       }
     }
   </style>
@@ -150,10 +163,13 @@
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T9LRD3M2" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   <div id="header">
-    <button onclick="connect()" id="ct">
-      <img src="https://hufung17.github.io/image/connet.svg" alt="bluetooth">
-    </button>
-    <button id="hm"><a href="index.html">Home</a></button>
+    <h1>E.CO.Footprint</h1> <!-- Added name here -->
+    <div> <!-- Wrapped buttons in a div for better control -->
+      <button onclick="connect()" id="ct">
+        <img src="https://hufung17.github.io/image/connet.svg" alt="bluetooth">
+      </button>
+      <button id="hm"><a href="index.html">Home</a></button>
+    </div>
   </div>
 
   <div id="map"></div>
