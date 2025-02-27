@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
   <meta charset="utf-8">
   <script type="text/javascript" src="ble.js"></script>
-  <title>E.CO.Footprint</title></title>
+  <title>E.CO.Footprint</title>
 
   <!-- Leaflet CSS for Map -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
@@ -25,7 +26,7 @@
       background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
       color: #2e7d32;
       line-height: 1.6;
-      margin: 0; padding: 0; box-sizing:
+      margin: 0; padding: 0; box-sizing: border-box;
     }
 
     #header {
@@ -52,7 +53,7 @@
       transition: background 0.3s ease;
     }
     #ct:hover, #hm:hover { background: #388e3c; }
-    #ct img { width: 75%; height: 75%px; vertical-align: middle; }
+    #ct img { width: 75%; height: 75%; vertical-align: middle; }
     #hm a { color: white; text-decoration: none; }
 
     #map { height: 400px; width: 100%; max-width: 800px; margin: 20px auto; border-radius: 10px; }
@@ -122,6 +123,7 @@
       <option value="">-- Select a saved route --</option>
     </select>
     <button id="loadBtn">Load Route</button>
+    <button id="deleteBtn">Delete Route</button>
     <p id="status">Click "Start Walk" to begin tracking your route.</p>
   </div>
 
@@ -130,12 +132,14 @@
   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
   <script>
     let map, routePoints = [], polyline, startMarker, currentMarker, watchId;
+    let currentLoadedRoute = null; // Variable to track the currently loaded route
     const startBtn = document.getElementById('startBtn');
     const stopBtn = document.getElementById('stopBtn');
     const routeNameInput = document.getElementById('routeName');
     const saveBtn = document.getElementById('saveBtn');
     const savedRoutesSelect = document.getElementById('savedRoutes');
     const loadBtn = document.getElementById('loadBtn');
+    const deleteBtn = document.getElementById('deleteBtn');
     const status = document.getElementById('status');
 
     if (!navigator.geolocation) {
@@ -146,6 +150,7 @@
       stopBtn.addEventListener('click', stopWalk);
       saveBtn.addEventListener('click', saveRoute);
       loadBtn.addEventListener('click', loadRoute);
+      deleteBtn.addEventListener('click', deleteRoute); // Event listener for delete button
     }
 
     document.addEventListener('DOMContentLoaded', listSavedRoutes);
@@ -174,6 +179,8 @@
           startMarker = L.marker(initialPoint).addTo(map).bindPopup('Start');
           polyline = L.polyline(routePoints, { color: '#388e3c' }).addTo(map);
           currentMarker = L.marker(initialPoint).addTo(map);
+
+          currentLoadedRoute = null; // Reset currentLoadedRoute when starting a new walk
 
           watchId = navigator.geolocation.watchPosition(
             (pos) => {
@@ -254,8 +261,33 @@
         L.marker(loadedPoints[loadedPoints.length - 1]).addTo(map).bindPopup('End');
         map.fitBounds(L.polyline(loadedPoints).getBounds());
         status.textContent = `Loaded route: ${selectedRoute}`;
+        currentLoadedRoute = selectedRoute; // Set currentLoadedRoute when loading a route
       } else {
         status.textContent = 'Failed to load route.';
+      }
+    }
+
+    function deleteRoute() {
+      const selectedRoute = savedRoutesSelect.value;
+      if (!selectedRoute) {
+        alert('Please select a route to delete.');
+        return;
+      }
+      if (confirm(`Are you sure you want to delete the route "${selectedRoute}"?`)) {
+        localStorage.removeItem(`route_${selectedRoute}`);
+        listSavedRoutes(); // Refresh the dropdown
+        if (currentLoadedRoute === selectedRoute && map) {
+          // Clear the map if the deleted route is currently loaded
+          map.eachLayer((layer) => {
+            if (!(layer instanceof L.TileLayer)) {
+              map.removeLayer(layer);
+            }
+          });
+          currentLoadedRoute = null;
+          status.textContent = 'Route deleted and map cleared.';
+        } else {
+          status.textContent = 'Route deleted successfully.';
+        }
       }
     }
   </script>
