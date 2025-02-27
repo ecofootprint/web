@@ -136,6 +136,13 @@
     }
     footer img:hover { transform: scale(1.1); }
 
+    /* Image Styling */
+    main img {
+      max-width: 100%;
+      height: auto;
+      margin: 20px 0;
+    }
+
     /* Hide Cantonese by default */
     .cantonese { display: none; }
   </style>
@@ -169,40 +176,120 @@
   </nav>
 
   <main>
+    <!-- Welcome Section (English) -->
     <section id="welcome" class="english">
       <h1>Welcome to PikaShoes</h1>
-      <p>Track your eco-friendly walks with our sustainable shoe companion and learn about sustainable living practices.</p>
+      <img src="images/pikashoes.jpg" alt="PikaShoes in nature">
+      <p>PikaShoes are designed with sustainability in mind. Made from recycled materials and manufactured using renewable energy, our shoes help you reduce your carbon footprint with every step. Track your eco-friendly walks with our sustainable shoe companion and learn about sustainable living practices.</p>
+      <p>Features of PikaShoes:</p>
+      <ul>
+        <li><strong>Eco-Friendly Materials:</strong> Crafted from recycled plastics and organic cotton.</li>
+        <li><strong>Renewable Energy Production:</strong> Our factories run on solar and wind power.</li>
+        <li><strong>Carbon Offset Program:</strong> We plant a tree for every pair sold.</li>
+      </ul>
+      <p>Join us in walking towards a greener future!</p>
     </section>
+
+    <!-- Welcome Section (Cantonese) -->
     <section id="welcome" class="cantonese">
       <h1>歡迎來到 PikaShoes</h1>
-      <p>用我哋嘅可持續鞋伴，追蹤你嘅環保步行，並了解可持續生活嘅實踐。</p>
+      <img src="images/pikashoes.jpg" alt="PikaShoes 在大自然中">
+      <p>PikaShoes 以可持續性為設計理念。使用回收材料製造，並採用可再生能源生產，我哋嘅鞋幫助你每一步都減少碳足跡。用我哋嘅可持續鞋伴追蹤你嘅環保步行，並了解可持續生活嘅實踐。</p>
+      <p>PikaShoes 嘅特點：</p>
+      <ul>
+        <li><strong>環保材料：</strong>由回收塑膠和有機棉製成。</li>
+        <li><strong>可再生能源生產：</strong>我哋嘅工廠使用太陽能和風能。</li>
+        <li><strong>碳抵消計劃：</strong>每售出一對鞋，我哋就種一棵樹。</li>
+      </ul>
+      <p>加入我哋，一齊走向更綠色嘅未來！</p>
     </section>
 
+    <!-- Energy Conservation Section (English) -->
     <section id="energy-conservation" class="english">
       <h2>Energy Conservation</h2>
-      <p>Discover simple ways to reduce energy use in your daily life, such as switching to LED lighting and optimizing your home's heating and cooling systems.</p>
+      <img src="images/led_lighting.jpg" alt="LED light bulbs">
+      <p>Energy conservation is crucial for reducing our environmental impact and saving money. Here are some effective ways to conserve energy in your daily life:</p>
+      <ul>
+        <li><strong>Switch to LED Lighting:</strong> LED bulbs use up to 80% less energy than traditional incandescent bulbs and last much longer.</li>
+        <li><strong>Optimize Heating and Cooling:</strong> Use programmable thermostats to adjust temperatures when you're not home. Ensure your home is well-insulated to prevent heat loss.</li>
+        <li><strong>Unplug Devices:</strong> Many electronics consume energy even when turned off. Unplug them or use smart power strips.</li>
+        <li><strong>Use Energy-Efficient Appliances:</strong> Look for appliances with the ENERGY STAR label, which are designed to use less energy.</li>
+        <li><strong>Reduce Water Heating Costs:</strong> Lower your water heater's temperature and insulate the tank to save energy.</li>
+      </ul>
+      <p>By implementing these strategies, you can significantly reduce your energy consumption and contribute to a more sustainable future.</p>
     </section>
+
+    <!-- Energy Conservation Section (Cantonese) -->
     <section id="energy-conservation" class="cantonese">
       <h2>節約能源</h2>
-      <p>了解日常生活中減少能源使用嘅簡單方法，例如轉用 LED 照明同優化家居嘅冷暖氣系統。</p>
+      <img src="images/led_lighting.jpg" alt="LED 燈泡">
+      <p>節約能源對於減少環境影響和節省金錢至關重要。以下是一些在日常生活中節約能源的有效方法：</p>
+      <ul>
+        <li><strong>轉用 LED 照明：</strong>LED 燈泡比傳統白熾燈泡節省高達 80% 的能源，而且使用壽命更長。</li>
+        <li><strong>優化冷暖氣系統：</strong>使用可編程恆溫器在你不在家時調整溫度。確保你的家有良好的隔熱，以防止熱量流失。</li>
+        <li><strong>拔掉電源：</strong>許多電子產品即使關閉也會消耗能源。拔掉它們或使用智能電源插座。</li>
+        <li><strong>使用節能電器：</strong>尋找帶有 ENERGY STAR 標籤的電器，這些電器設計為使用更少的能源。</li>
+        <li><strong>減少熱水成本：</strong>降低熱水器的溫度並為水箱隔熱以節省能源。</li>
+      </ul>
+      <p>通過實施這些策略，你可以顯著減少能源消耗，為更可持續的未來做出貢獻。</p>
     </section>
 
+    <!-- Renewable Energy Section (English) -->
     <section id="renewable-energy" class="english">
       <h2>Renewable Energy</h2>
-      <p>Learn about clean energy sources like solar and wind power, and how they can help reduce our dependence on fossil fuels.</p>
-    </section>
-    <section id="renewable-energy" class="cantonese">
-      <h2>可再生能源</h2>
-      <p>了解太陽能同風能等清潔能源，以及佢哋如何幫助減少對化石燃料嘅依賴。</p>
+      <img src="images/solar_panels.jpg" alt="Solar panels on a roof">
+      <p>Renewable energy sources are essential for a sustainable future. They provide clean, inexhaustible power and reduce our reliance on fossil fuels. Here are some key types of renewable energy:</p>
+      <ul>
+        <li><strong>Solar Power:</strong> Harnesses energy from the sun using photovoltaic cells. It's versatile and can be used for homes, businesses, and even portable devices.</li>
+        <li><strong>Wind Power:</strong> Uses wind turbines to convert kinetic energy into electricity. Wind farms can generate large amounts of power with minimal environmental impact.</li>
+        <li><strong>Hydropower:</strong> Generates electricity by harnessing the energy of moving water, typically from dams or rivers.</li>
+        <li><strong>Geothermal Energy:</strong> Taps into heat from the Earth's core to generate electricity or provide direct heating.</li>
+      </ul>
+      <p>By supporting and adopting renewable energy, we can significantly reduce greenhouse gas emissions and combat climate change.</p>
     </section>
 
+    <!-- Renewable Energy Section (Cantonese) -->
+    <section id="renewable-energy" class="cantonese">
+      <h2>可再生能源</h2>
+      <img src="images/solar_panels.jpg" alt="屋頂上的太陽能板">
+      <p>可再生能源對可持續未來至關重要。它們提供清潔、無窮無盡的能源，減少我們對化石燃料的依賴。以下是一些主要的可再生能源類型：</p>
+      <ul>
+        <li><strong>太陽能：</strong>使用光伏電池從太陽獲取能源。它用途廣泛，可用於家庭、企業甚至便携設備。</li>
+        <li><strong>風能：</strong>使用風力渦輪機將動能轉化為電力。風力發電場可以以最小的環境影響產生大量電力。</li>
+        <li><strong>水力發電：</strong>通過利用流動水（通常來自大壩或河流）的能量來發電。</li>
+        <li><strong>地熱能：</strong>利用地球核心的熱量來發電或直接供暖。</li>
+      </ul>
+      <p>通過支持和採用可再生能源，我們可以顯著減少溫室氣體排放，應對氣候變化。</p>
+    </section>
+
+    <!-- Low-Carbon Living Section (English) -->
     <section id="low-carbon-living" class="english">
       <h2>Low-Carbon Living</h2>
-      <p>Adopt habits that lower your carbon footprint, such as using public transportation, reducing meat consumption, and supporting sustainable products.</p>
+      <img src="images/public_transport.jpg" alt="People using public transportation">
+      <p>Low-carbon living involves making choices that reduce your carbon footprint. Here are some practical ways to live more sustainably:</p>
+      <ul>
+        <li><strong>Use Public Transportation:</strong> Opt for buses, trains, or carpooling to reduce emissions from personal vehicles.</li>
+        <li><strong>Reduce Meat Consumption:</strong> Livestock farming is a major source of greenhouse gases. Try plant-based meals a few times a week.</li>
+        <li><strong>Support Sustainable Products:</strong> Choose products made from recycled materials or those with minimal packaging.</li>
+        <li><strong>Conserve Water:</strong> Fix leaks, take shorter showers, and use water-efficient appliances to save both water and energy.</li>
+        <li><strong>Plant Trees:</strong> Trees absorb CO2 and provide oxygen. Consider joining local tree-planting initiatives.</li>
+      </ul>
+      <p>Every small action counts. By adopting these habits, you can contribute to a healthier planet for future generations.</p>
     </section>
+
+    <!-- Low-Carbon Living Section (Cantonese) -->
     <section id="low-carbon-living" class="cantonese">
       <h2>低碳生活</h2>
-      <p>養成降低碳足跡嘅習慣，例如使用公共交通、減少肉類消費同支持可持續產品。</p>
+      <img src="images/public_transport.jpg" alt="人們使用公共交通">
+      <p>低碳生活涉及做出減少碳足跡的選擇。以下是一些實用的可持續生活方式：</p>
+      <ul>
+        <li><strong>使用公共交通：</strong>選擇巴士、火車或拼車，以減少個人車輛的排放。</li>
+        <li><strong>減少肉類消費：</strong>畜牧業是溫室氣體的主要來源。每週嘗試幾次植物性飲食。</li>
+        <li><strong>支持可持續產品：</strong>選擇由回收材料製成的產品或包裝最少的產品。</li>
+        <li><strong>節約用水：</strong>修復漏水、縮短淋浴時間並使用節水電器，以節省水和能源。</li>
+        <li><strong>種樹：</strong>樹木吸收二氧化碳並提供氧氣。考慮參加本地植樹活動。</li>
+      </ul>
+      <p>每一個小行動都重要。通過養成這些習慣，你可以為未來世代創造一個更健康的地球。</p>
     </section>
   </main>
 
