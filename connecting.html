@@ -36,7 +36,7 @@
       height: 60px;
       background: #2e7d32;
       display: flex;
-      justify-content: space-between; /* Changed to space-between for title and buttons */
+      justify-content: space-between;
       align-items: center;
       padding: 0 10px;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -44,7 +44,7 @@
     }
     #header h1 {
       color: white;
-      font-size: 20px; /* Adjusted for readability */
+      font-size: 20px;
       margin: 0;
       padding-left: 10px;
       font-weight: 600;
@@ -125,7 +125,6 @@
       font-size: 16px;
     }
 
-    /* Media Queries for Mobile */
     @media (max-width: 600px) {
       #header {
         justify-content: center;
@@ -133,8 +132,8 @@
         padding: 10px;
       }
       #header h1 {
-        font-size: 18px; /* Slightly smaller on mobile */
-        width: 100%; /* Full width on small screens */
+        font-size: 18px;
+        width: 100%;
         text-align: center;
         padding: 5px 0;
       }
@@ -159,12 +158,11 @@
   </style>
 </head>
 <body>
-  <!-- Google Tag Manager (noscript) -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T9LRD3M2" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   <div id="header">
-    <h1>e.co.footprint</h1> <!-- Added name here -->
-    <div> <!-- Wrapped buttons in a div for better control -->
+    <h1>e.co.footprint</h1>
+    <div>
       <button onclick="connect()" id="ct">
         <img src="https://hufung17.github.io/image/connet.svg" alt="bluetooth">
       </button>
@@ -215,6 +213,30 @@
 
     document.addEventListener('DOMContentLoaded', listSavedRoutes);
 
+    function calculateDistance(lat1, lon1, lat2, lon2) {
+        const R = 6371; // Earth's radius in kilometers
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLon = (lon2 - lon1) * Math.PI / 180;
+        const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                  Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                  Math.sin(dLon/2) * Math.sin(dLon/2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        return R * c; // Distance in kilometers
+    }
+
+    function calculateTotalDistance(points) {
+        let totalDistance = 0;
+        for (let i = 0; i < points.length - 1; i++) {
+            totalDistance += calculateDistance(
+                points[i].lat,
+                points[i].lng,
+                points[i + 1].lat,
+                points[i + 1].lng
+            );
+        }
+        return totalDistance;
+    }
+
     function startWalk() {
       if (map) { map.remove(); map = null; }
       routePoints = [];
@@ -249,13 +271,15 @@
               polyline.setLatLngs(routePoints);
               currentMarker.setLatLng(newPoint);
               map.setView(newPoint);
+              const distance = calculateTotalDistance(routePoints);
+              status.textContent = `Tracking your walk... Distance: ${distance.toFixed(2)} km`;
             },
             (err) => { status.textContent = 'Unable to retrieve your location.'; },
             { enableHighAccuracy: true, maximumAge: 10000, timeout: 10000 }
           );
 
           stopBtn.disabled = false;
-          status.textContent = 'Tracking your walk...';
+          status.textContent = 'Tracking your walk... Distance: 0.00 km';
         },
         (err) => {
           status.textContent = 'Unable to retrieve your location. Please allow location access.';
@@ -276,19 +300,24 @@
       startBtn.disabled = false;
       routeNameInput.style.display = 'inline';
       saveBtn.style.display = 'inline';
-      status.textContent = 'Enter a name and click "Save Route" to save your walk.';
+      const distance = calculateTotalDistance(routePoints);
+      status.textContent = `Walk stopped. Total Distance: ${distance.toFixed(2)} km. Enter a name and click "Save Route" to save your walk.`;
     }
 
     function saveRoute() {
-      const routeName = routeNameInput.value.trim();
-      if (!routeName) { alert('Please enter a name for the route.'); return; }
-      const routeData = JSON.stringify(routePoints.map(point => ({ lat: point.lat, lng: point.lng })));
-      localStorage.setItem(`route_${routeName}`, routeData);
-      routeNameInput.value = '';
-      routeNameInput.style.display = 'none';
-      saveBtn.style.display = 'none';
-      status.textContent = 'Route saved successfully.';
-      listSavedRoutes();
+        const routeName = routeNameInput.value.trim();
+        if (!routeName) { alert('Please enter a name for the route.'); return; }
+        const totalDistance = calculateTotalDistance(routePoints);
+        const routeData = JSON.stringify({
+            points: routePoints.map(point => ({ lat: point.lat, lng: point.lng })),
+            distance: totalDistance
+        });
+        localStorage.setItem(`route_${routeName}`, routeData);
+        routeNameInput.value = '';
+        routeNameInput.style.display = 'none';
+        saveBtn.style.display = 'none';
+        status.textContent = `Route saved successfully. Distance: ${totalDistance.toFixed(2)} km`;
+        listSavedRoutes();
     }
 
     function listSavedRoutes() {
@@ -306,25 +335,27 @@
     }
 
     function loadRoute() {
-      const selectedRoute = savedRoutesSelect.value;
-      if (!selectedRoute) { alert('Please select a route to load.'); return; }
-      const routeData = localStorage.getItem(`route_${selectedRoute}`);
-      if (routeData) {
-        const loadedPoints = JSON.parse(routeData).map(point => L.latLng(point.lat, point.lng));
-        if (map) { map.remove(); }
-        map = L.map('map').setView(loadedPoints[0], 15);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
-        L.polyline(loadedPoints, { color: '#388e3c' }).addTo(map);
-        L.marker(loadedPoints[0]).addTo(map).bindPopup('Start');
-        L.marker(loadedPoints[loadedPoints.length - 1]).addTo(map).bindPopup('End');
-        map.fitBounds(L.polyline(loadedPoints).getBounds());
-        status.textContent = `Loaded route: ${selectedRoute}`;
-        currentLoadedRoute = selectedRoute;
-      } else {
-        status.textContent = 'Failed to load route.';
-      }
+        const selectedRoute = savedRoutesSelect.value;
+        if (!selectedRoute) { alert('Please select a route to load.'); return; }
+        const routeData = localStorage.getItem(`route_${selectedRoute}`);
+        if (routeData) {
+            const data = JSON.parse(routeData);
+            const loadedPoints = data.points.map(point => L.latLng(point.lat, point.lng));
+            const distance = data.distance;
+            if (map) { map.remove(); }
+            map = L.map('map').setView(loadedPoints[0], 15);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+            L.polyline(loadedPoints, { color: '#388e3c' }).addTo(map);
+            L.marker(loadedPoints[0]).addTo(map).bindPopup('Start');
+            L.marker(loadedPoints[loadedPoints.length - 1]).addTo(map).bindPopup('End');
+            map.fitBounds(L.polyline(loadedPoints).getBounds());
+            status.textContent = `Loaded route: ${selectedRoute} - Distance: ${distance.toFixed(2)} km`;
+            currentLoadedRoute = selectedRoute;
+        } else {
+            status.textContent = 'Failed to load route.';
+        }
     }
 
     function deleteRoute() {
@@ -351,4 +382,5 @@
     }
   </script>
 </body>
+</html>
 </html>
