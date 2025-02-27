@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <script type="text/javascript" src="ble.js"></script>
-  <title>e.co.footprint</title>
+  <title>PikaShoes - Sustainable Living</title>
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
@@ -35,14 +35,16 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      margin: 0; padding: 0; box-sizing: 
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
     #header {
       height: 60px;
       background: #2e7d32;
       display: flex;
-      justify-content: flex-end;
+      justify-content: space-between;
       align-items: center;
       padding: 0 20px;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -63,6 +65,38 @@
     #ct:hover { background: #388e3c; }
     #ct a { color: white; text-decoration: none; }
 
+    /* Language Switcher */
+    #lang-switcher {
+      color: white;
+      font-size: 16px;
+    }
+    #lang-switcher button {
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    nav {
+      background-color: #4caf50;
+      padding: 10px 0;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      justify-content: center;
+      padding: 0;
+    }
+    nav li {
+      margin: 0 15px;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
     main {
       text-align: center;
       padding: 40px 20px;
@@ -70,6 +104,12 @@
     main h1 {
       font-size: 36px;
       margin-bottom: 20px;
+    }
+    main h2 {
+      font-size: 24px;
+      margin-top: 40px;
+      margin-bottom: 10px;
+      color: #2e7d32;
     }
     main p {
       font-size: 18px;
@@ -95,6 +135,9 @@
       transition: transform 0.3s ease;
     }
     footer img:hover { transform: scale(1.1); }
+
+    /* Hide Cantonese by default */
+    .cantonese { display: none; }
   </style>
 </head>
 <body>
@@ -102,15 +145,68 @@
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T9LRD3M2" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   <div id="header">
-    <button id="ct"><a href="connecting.html">Start</a></button>
+    <div id="lang-switcher">
+      <button onclick="switchLanguage('en')">English</button> | <button onclick="switchLanguage('yue')">粵語</button>
+    </div>
+    <button id="ct"><a href="#welcome">Get Started</a></button>
   </div>
 
+  <nav class="english">
+    <ul>
+      <li><a href="#welcome">Welcome</a></li>
+      <li><a href="#energy-conservation">Energy Conservation</a></li>
+      <li><a href="#renewable-energy">Renewable Energy</a></li>
+      <li><a href="#low-carbon-living">Low-Carbon Living</a></li>
+    </ul>
+  </nav>
+  <nav class="cantonese">
+    <ul>
+      <li><a href="#welcome">歡迎</a></li>
+      <li><a href="#energy-conservation">節約能源</a></li>
+      <li><a href="#renewable-energy">可再生能源</a></li>
+      <li><a href="#low-carbon-living">低碳生活</a></li>
+    </ul>
+  </nav>
+
   <main>
-    <h1>Welcome to E.CO.Footprint</h1>
-    <p>Track your eco-friendly walks with our sustainable shoe companion.</p>
+    <section id="welcome" class="english">
+      <h1>Welcome to PikaShoes</h1>
+      <p>Track your eco-friendly walks with our sustainable shoe companion and learn about sustainable living practices.</p>
+    </section>
+    <section id="welcome" class="cantonese">
+      <h1>歡迎來到 PikaShoes</h1>
+      <p>用我哋嘅可持續鞋伴，追蹤你嘅環保步行，並了解可持續生活嘅實踐。</p>
+    </section>
+
+    <section id="energy-conservation" class="english">
+      <h2>Energy Conservation</h2>
+      <p>Discover simple ways to reduce energy use in your daily life, such as switching to LED lighting and optimizing your home's heating and cooling systems.</p>
+    </section>
+    <section id="energy-conservation" class="cantonese">
+      <h2>節約能源</h2>
+      <p>了解日常生活中減少能源使用嘅簡單方法，例如轉用 LED 照明同優化家居嘅冷暖氣系統。</p>
+    </section>
+
+    <section id="renewable-energy" class="english">
+      <h2>Renewable Energy</h2>
+      <p>Learn about clean energy sources like solar and wind power, and how they can help reduce our dependence on fossil fuels.</p>
+    </section>
+    <section id="renewable-energy" class="cantonese">
+      <h2>可再生能源</h2>
+      <p>了解太陽能同風能等清潔能源，以及佢哋如何幫助減少對化石燃料嘅依賴。</p>
+    </section>
+
+    <section id="low-carbon-living" class="english">
+      <h2>Low-Carbon Living</h2>
+      <p>Adopt habits that lower your carbon footprint, such as using public transportation, reducing meat consumption, and supporting sustainable products.</p>
+    </section>
+    <section id="low-carbon-living" class="cantonese">
+      <h2>低碳生活</h2>
+      <p>養成降低碳足跡嘅習慣，例如使用公共交通、減少肉類消費同支持可持續產品。</p>
+    </section>
   </main>
 
-  <footer>
+  <footer class="english">
     <div>
       <a href="https://www.instagram.com/pikashoe.spyc_2425/?utm_source=ig_web_button_share_sheet" target="_blank">
         <img src="https://i.postimg.cc/ZqxXdtL6/rb-2227.png" alt="Instagram">
@@ -118,5 +214,27 @@
     </div>
     <p>Copyright © 2024 by Hufung</p>
   </footer>
+  <footer class="cantonese">
+    <div>
+      <a href="https://www.instagram.com/pikashoe.spyc_2425/?utm_source=ig_web_button_share_sheet" target="_blank">
+        <img src="https://i.postimg.cc/ZqxXdtL6/rb-2227.png" alt="Instagram">
+      </a>
+    </div>
+    <p>版權所有 © 2024 Hufung</p>
+  </footer>
+
+  <script>
+    function switchLanguage(lang) {
+      if (lang === 'en') {
+        document.querySelectorAll('.english').forEach(el => el.style.display = 'block');
+        document.querySelectorAll('.cantonese').forEach(el => el.style.display = 'none');
+      } else if (lang === 'yue') {
+        document.querySelectorAll('.english').forEach(el => el.style.display = 'none');
+        document.querySelectorAll('.cantonese').forEach(el => el.style.display = 'block');
+      }
+    }
+    // Default to English
+    switchLanguage('en');
+  </script>
 </body>
 </html>
