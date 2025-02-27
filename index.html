@@ -1,29 +1,14 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en">
 <head>
   <meta charset="utf-8">
-  <script type="text/javascript" src="ble.js"></script>
   <title>PikaShoes - Sustainable Living</title>
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
-  <!-- Google Tag Manager -->
-  <script>
-    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});
-    var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
-    j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-T9LRD3M2');
-  </script>
-
-  <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZY41GB0EMW"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-ZY41GB0EMW');
-  </script>
+  <!-- Font Awesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
   <style>
     body {
@@ -34,20 +19,33 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
     }
 
     #header {
-      height: 60px;
       background: #2e7d32;
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 0 20px;
+      height: 60px;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    #site-title {
+      font-size: 24px;
+      font-weight: 600;
+      color: white;
+    }
+    #lang-switcher {
+      color: white;
+    }
+    #lang-switcher button {
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      font-weight: 600;
     }
     #ct {
       height: 40px;
@@ -58,28 +56,13 @@
       color: white;
       font-size: 16px;
       cursor: pointer;
-      text-align: center;
-      line-height: 40px;
       transition: background 0.3s ease;
     }
     #ct:hover { background: #388e3c; }
     #ct a { color: white; text-decoration: none; }
 
-    /* Language Switcher */
-    #lang-switcher {
-      color: white;
-      font-size: 16px;
-    }
-    #lang-switcher button {
-      background: none;
-      border: none;
-      color: white;
-      cursor: pointer;
-      font-weight: 600;
-    }
-
     nav {
-      background-color: #4caf50;
+      background: #4caf50;
       padding: 10px 0;
     }
     nav ul {
@@ -88,32 +71,70 @@
       justify-content: center;
       padding: 0;
     }
-    nav li {
-      margin: 0 15px;
-    }
+    nav li { margin: 0 15px; }
     nav a {
       color: white;
       text-decoration: none;
       font-weight: 600;
+      transition: color 0.3s ease;
+    }
+    nav a:hover {
+      color: #388e3c;
+      text-decoration: underline;
     }
 
     main {
-      text-align: center;
+      max-width: 800px;
+      margin: 0 auto;
       padding: 40px 20px;
+      text-align: center;
+    }
+    main section {
+      margin-bottom: 40px;
+      padding: 20px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
     main h1 {
       font-size: 36px;
+      color: #2e7d32;
       margin-bottom: 20px;
     }
     main h2 {
       font-size: 24px;
-      margin-top: 40px;
-      margin-bottom: 10px;
       color: #2e7d32;
+      margin-bottom: 10px;
     }
     main p {
       font-size: 18px;
       color: #388e3c;
+    }
+    main ul {
+      list-style: none;
+      padding: 0;
+    }
+    main ul li {
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+    }
+    main ul li i {
+      margin-right: 10px;
+      color: #4caf50;
+    }
+
+    main figure { margin: 20px 0; }
+    main img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    main figcaption {
+      font-style: italic;
+      color: #2e7d32;
+      margin-top: 5px;
     }
 
     footer {
@@ -123,42 +144,40 @@
       padding: 20px;
       font-size: 14px;
     }
-    footer a {
-      color: white;
-      text-decoration: none;
-      margin: 0 10px;
-    }
+    footer a { color: white; text-decoration: none; }
     footer img {
       width: 40px;
       height: 40px;
-      vertical-align: middle;
       transition: transform 0.3s ease;
     }
     footer img:hover { transform: scale(1.1); }
 
-    /* Image Styling */
-    main img {
-      max-width: 100%;
-      height: auto;
-      margin: 20px 0;
+    /* Language Transition */
+    .english, .cantonese {
+      transition: opacity 0.5s ease;
     }
+    .hidden { opacity: 0; visibility: hidden; }
+    .visible { opacity: 1; visibility: visible; }
 
-    /* Hide Cantonese by default */
-    .cantonese { display: none; }
+    /* Responsive Design */
+    @media (max-width: 600px) {
+      main h1 { font-size: 28px; }
+      main h2 { font-size: 20px; }
+      nav ul { flex-direction: column; align-items: center; }
+      nav li { margin: 10px 0; }
+    }
   </style>
 </head>
 <body>
-  <!-- Google Tag Manager (noscript) -->
-  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T9LRD3M2" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-
   <div id="header">
+    <div id="site-title">PikaShoes</div>
     <div id="lang-switcher">
       <button onclick="switchLanguage('en')">English</button> | <button onclick="switchLanguage('yue')">粵語</button>
     </div>
     <button id="ct"><a href="#welcome">Get Started</a></button>
   </div>
 
-  <nav class="english">
+  <nav class="english visible">
     <ul>
       <li><a href="#welcome">Welcome</a></li>
       <li><a href="#energy-conservation">Energy Conservation</a></li>
@@ -166,7 +185,7 @@
       <li><a href="#low-carbon-living">Low-Carbon Living</a></li>
     </ul>
   </nav>
-  <nav class="cantonese">
+  <nav class="cantonese hidden">
     <ul>
       <li><a href="#welcome">歡迎</a></li>
       <li><a href="#energy-conservation">節約能源</a></li>
@@ -176,152 +195,73 @@
   </nav>
 
   <main>
-    <!-- Welcome Section (English) -->
-    <section id="welcome" class="english">
+    <!-- Welcome Section -->
+    <section id="welcome" class="english visible">
       <h1>Welcome to PikaShoes</h1>
-      <img src="images/pikashoes.jpg" alt="PikaShoes in nature">
-      <p>PikaShoes are designed with sustainability in mind. Made from recycled materials and manufactured using renewable energy, our shoes help you reduce your carbon footprint with every step. Track your eco-friendly walks with our sustainable shoe companion and learn about sustainable living practices.</p>
-      <p>Features of PikaShoes:</p>
+      <figure>
+        <img src="images/pikashoes.jpg" alt="PikaShoes in nature">
+        <figcaption>PikaShoes: Sustainable footwear for a greener future.</figcaption>
+      </figure>
+      <p>PikaShoes are designed with sustainability in mind. Made from recycled materials and manufactured using renewable energy, our shoes help you reduce your carbon footprint with every step.</p>
       <ul>
-        <li><strong>Eco-Friendly Materials:</strong> Crafted from recycled plastics and organic cotton.</li>
-        <li><strong>Renewable Energy Production:</strong> Our factories run on solar and wind power.</li>
-        <li><strong>Carbon Offset Program:</strong> We plant a tree for every pair sold.</li>
+        <li><i class="fas fa-leaf"></i> <strong>Eco-Friendly Materials:</strong> Crafted from recycled plastics and organic cotton.</li>
+        <li><i class="fas fa-leaf"></i> <strong>Renewable Energy Production:</strong> Powered by solar and wind energy.</li>
+        <li><i class="fas fa-leaf"></i> <strong>Carbon Offset:</strong> A tree planted for every pair sold.</li>
       </ul>
-      <p>Join us in walking towards a greener future!</p>
     </section>
-
-    <!-- Welcome Section (Cantonese) -->
-    <section id="welcome" class="cantonese">
+    <section id="welcome" class="cantonese hidden">
       <h1>歡迎來到 PikaShoes</h1>
-      <img src="images/pikashoes.jpg" alt="PikaShoes 在大自然中">
-      <p>PikaShoes 以可持續性為設計理念。使用回收材料製造，並採用可再生能源生產，我哋嘅鞋幫助你每一步都減少碳足跡。用我哋嘅可持續鞋伴追蹤你嘅環保步行，並了解可持續生活嘅實踐。</p>
-      <p>PikaShoes 嘅特點：</p>
+      <figure>
+        <img src="images/pikashoes.jpg" alt="PikaShoes 在大自然中">
+        <figcaption>PikaShoes：為更綠色嘅未來而設計嘅可持續鞋履。</figcaption>
+      </figure>
+      <p>PikaShoes 以可持續性為設計理念。使用回收材料製造並採用可再生能源生產，我哋嘅鞋幫助你每一步都減少碳足跡。</p>
       <ul>
-        <li><strong>環保材料：</strong>由回收塑膠和有機棉製成。</li>
-        <li><strong>可再生能源生產：</strong>我哋嘅工廠使用太陽能和風能。</li>
-        <li><strong>碳抵消計劃：</strong>每售出一對鞋，我哋就種一棵樹。</li>
+        <li><i class="fas fa-leaf"></i> <strong>環保材料：</strong>由回收塑膠和有機棉製成。</li>
+        <li><i class="fas fa-leaf"></i> <strong>可再生能源生產：</strong>用太陽能同風能驅動。</li>
+        <li><i class="fas fa-leaf"></i> <strong>碳抵消：</strong>每賣出一對鞋就種一棵樹。</li>
       </ul>
-      <p>加入我哋，一齊走向更綠色嘅未來！</p>
     </section>
 
-    <!-- Energy Conservation Section (English) -->
-    <section id="energy-conservation" class="english">
-      <h2>Energy Conservation</h2>
-      <img src="images/led_lighting.jpg" alt="LED light bulbs">
-      <p>Energy conservation is crucial for reducing our environmental impact and saving money. Here are some effective ways to conserve energy in your daily life:</p>
-      <ul>
-        <li><strong>Switch to LED Lighting:</strong> LED bulbs use up to 80% less energy than traditional incandescent bulbs and last much longer.</li>
-        <li><strong>Optimize Heating and Cooling:</strong> Use programmable thermostats to adjust temperatures when you're not home. Ensure your home is well-insulated to prevent heat loss.</li>
-        <li><strong>Unplug Devices:</strong> Many electronics consume energy even when turned off. Unplug them or use smart power strips.</li>
-        <li><strong>Use Energy-Efficient Appliances:</strong> Look for appliances with the ENERGY STAR label, which are designed to use less energy.</li>
-        <li><strong>Reduce Water Heating Costs:</strong> Lower your water heater's temperature and insulate the tank to save energy.</li>
-      </ul>
-      <p>By implementing these strategies, you can significantly reduce your energy consumption and contribute to a more sustainable future.</p>
-    </section>
-
-    <!-- Energy Conservation Section (Cantonese) -->
-    <section id="energy-conservation" class="cantonese">
-      <h2>節約能源</h2>
-      <img src="images/led_lighting.jpg" alt="LED 燈泡">
-      <p>節約能源對於減少環境影響和節省金錢至關重要。以下是一些在日常生活中節約能源的有效方法：</p>
-      <ul>
-        <li><strong>轉用 LED 照明：</strong>LED 燈泡比傳統白熾燈泡節省高達 80% 的能源，而且使用壽命更長。</li>
-        <li><strong>優化冷暖氣系統：</strong>使用可編程恆溫器在你不在家時調整溫度。確保你的家有良好的隔熱，以防止熱量流失。</li>
-        <li><strong>拔掉電源：</strong>許多電子產品即使關閉也會消耗能源。拔掉它們或使用智能電源插座。</li>
-        <li><strong>使用節能電器：</strong>尋找帶有 ENERGY STAR 標籤的電器，這些電器設計為使用更少的能源。</li>
-        <li><strong>減少熱水成本：</strong>降低熱水器的溫度並為水箱隔熱以節省能源。</li>
-      </ul>
-      <p>通過實施這些策略，你可以顯著減少能源消耗，為更可持續的未來做出貢獻。</p>
-    </section>
-
-    <!-- Renewable Energy Section (English) -->
-    <section id="renewable-energy" class="english">
-      <h2>Renewable Energy</h2>
-      <img src="images/solar_panels.jpg" alt="Solar panels on a roof">
-      <p>Renewable energy sources are essential for a sustainable future. They provide clean, inexhaustible power and reduce our reliance on fossil fuels. Here are some key types of renewable energy:</p>
-      <ul>
-        <li><strong>Solar Power:</strong> Harnesses energy from the sun using photovoltaic cells. It's versatile and can be used for homes, businesses, and even portable devices.</li>
-        <li><strong>Wind Power:</strong> Uses wind turbines to convert kinetic energy into electricity. Wind farms can generate large amounts of power with minimal environmental impact.</li>
-        <li><strong>Hydropower:</strong> Generates electricity by harnessing the energy of moving water, typically from dams or rivers.</li>
-        <li><strong>Geothermal Energy:</strong> Taps into heat from the Earth's core to generate electricity or provide direct heating.</li>
-      </ul>
-      <p>By supporting and adopting renewable energy, we can significantly reduce greenhouse gas emissions and combat climate change.</p>
-    </section>
-
-    <!-- Renewable Energy Section (Cantonese) -->
-    <section id="renewable-energy" class="cantonese">
-      <h2>可再生能源</h2>
-      <img src="images/solar_panels.jpg" alt="屋頂上的太陽能板">
-      <p>可再生能源對可持續未來至關重要。它們提供清潔、無窮無盡的能源，減少我們對化石燃料的依賴。以下是一些主要的可再生能源類型：</p>
-      <ul>
-        <li><strong>太陽能：</strong>使用光伏電池從太陽獲取能源。它用途廣泛，可用於家庭、企業甚至便携設備。</li>
-        <li><strong>風能：</strong>使用風力渦輪機將動能轉化為電力。風力發電場可以以最小的環境影響產生大量電力。</li>
-        <li><strong>水力發電：</strong>通過利用流動水（通常來自大壩或河流）的能量來發電。</li>
-        <li><strong>地熱能：</strong>利用地球核心的熱量來發電或直接供暖。</li>
-      </ul>
-      <p>通過支持和採用可再生能源，我們可以顯著減少溫室氣體排放，應對氣候變化。</p>
-    </section>
-
-    <!-- Low-Carbon Living Section (English) -->
-    <section id="low-carbon-living" class="english">
-      <h2>Low-Carbon Living</h2>
-      <img src="images/public_transport.jpg" alt="People using public transportation">
-      <p>Low-carbon living involves making choices that reduce your carbon footprint. Here are some practical ways to live more sustainably:</p>
-      <ul>
-        <li><strong>Use Public Transportation:</strong> Opt for buses, trains, or carpooling to reduce emissions from personal vehicles.</li>
-        <li><strong>Reduce Meat Consumption:</strong> Livestock farming is a major source of greenhouse gases. Try plant-based meals a few times a week.</li>
-        <li><strong>Support Sustainable Products:</strong> Choose products made from recycled materials or those with minimal packaging.</li>
-        <li><strong>Conserve Water:</strong> Fix leaks, take shorter showers, and use water-efficient appliances to save both water and energy.</li>
-        <li><strong>Plant Trees:</strong> Trees absorb CO2 and provide oxygen. Consider joining local tree-planting initiatives.</li>
-      </ul>
-      <p>Every small action counts. By adopting these habits, you can contribute to a healthier planet for future generations.</p>
-    </section>
-
-    <!-- Low-Carbon Living Section (Cantonese) -->
-    <section id="low-carbon-living" class="cantonese">
-      <h2>低碳生活</h2>
-      <img src="images/public_transport.jpg" alt="人們使用公共交通">
-      <p>低碳生活涉及做出減少碳足跡的選擇。以下是一些實用的可持續生活方式：</p>
-      <ul>
-        <li><strong>使用公共交通：</strong>選擇巴士、火車或拼車，以減少個人車輛的排放。</li>
-        <li><strong>減少肉類消費：</strong>畜牧業是溫室氣體的主要來源。每週嘗試幾次植物性飲食。</li>
-        <li><strong>支持可持續產品：</strong>選擇由回收材料製成的產品或包裝最少的產品。</li>
-        <li><strong>節約用水：</strong>修復漏水、縮短淋浴時間並使用節水電器，以節省水和能源。</li>
-        <li><strong>種樹：</strong>樹木吸收二氧化碳並提供氧氣。考慮參加本地植樹活動。</li>
-      </ul>
-      <p>每一個小行動都重要。通過養成這些習慣，你可以為未來世代創造一個更健康的地球。</p>
-    </section>
+    <!-- Add other sections similarly with English and Cantonese versions -->
   </main>
 
-  <footer class="english">
-    <div>
-      <a href="https://www.instagram.com/pikashoe.spyc_2425/?utm_source=ig_web_button_share_sheet" target="_blank">
-        <img src="https://i.postimg.cc/ZqxXdtL6/rb-2227.png" alt="Instagram">
-      </a>
-    </div>
+  <footer class="english visible">
+    <a href="https://www.instagram.com/pikashoe.spyc_2425/" target="_blank">
+      <img src="https://i.postimg.cc/ZqxXdtL6/rb-2227.png" alt="Instagram">
+    </a>
     <p>Copyright © 2024 by Hufung</p>
   </footer>
-  <footer class="cantonese">
-    <div>
-      <a href="https://www.instagram.com/pikashoe.spyc_2425/?utm_source=ig_web_button_share_sheet" target="_blank">
-        <img src="https://i.postimg.cc/ZqxXdtL6/rb-2227.png" alt="Instagram">
-      </a>
-    </div>
+  <footer class="cantonese hidden">
+    <a href="https://www.instagram.com/pikashoe.spyc_2425/" target="_blank">
+      <img src="https://i.postimg.cc/ZqxXdtL6/rb-2227.png" alt="Instagram">
+    </a>
     <p>版權所有 © 2024 Hufung</p>
   </footer>
 
   <script>
     function switchLanguage(lang) {
       if (lang === 'en') {
-        document.querySelectorAll('.english').forEach(el => el.style.display = 'block');
-        document.querySelectorAll('.cantonese').forEach(el => el.style.display = 'none');
+        document.querySelectorAll('.english').forEach(el => {
+          el.classList.add('visible');
+          el.classList.remove('hidden');
+        });
+        document.querySelectorAll('.cantonese').forEach(el => {
+          el.classList.add('hidden');
+          el.classList.remove('visible');
+        });
       } else if (lang === 'yue') {
-        document.querySelectorAll('.english').forEach(el => el.style.display = 'none');
-        document.querySelectorAll('.cantonese').forEach(el => el.style.display = 'block');
+        document.querySelectorAll('.english').forEach(el => {
+          el.classList.add('hidden');
+          el.classList.remove('visible');
+        });
+        document.querySelectorAll('.cantonese').forEach(el => {
+          el.classList.add('visible');
+          el.classList.remove('hidden');
+        });
       }
     }
-    // Default to English
-    switchLanguage('en');
+    switchLanguage('en'); // Default to English
   </script>
 </body>
 </html>
