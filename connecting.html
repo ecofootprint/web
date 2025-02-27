@@ -1,8 +1,8 @@
-
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Added viewport meta tag -->
   <script type="text/javascript" src="ble.js"></script>
   <title>E.CO.Footprint</title>
 
@@ -26,7 +26,10 @@
       background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
       color: #2e7d32;
       line-height: 1.6;
-      margin: 0; padding: 0; box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      min-height: 100vh;
     }
 
     #header {
@@ -35,59 +38,74 @@
       display: flex;
       justify-content: flex-end;
       align-items: center;
-      padding: 0 20px;
+      padding: 0 10px;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      flex-wrap: wrap; /* Allow wrapping on small screens */
     }
     #ct, #hm {
-      height: 40px;
-      width: 120px;
+      height: 48px; /* Increased for touch-friendliness */
+      width: 130px;
       background: #4caf50;
       border: none;
-      border-radius: 20px;
+      border-radius: 24px;
       color: white;
       font-size: 16px;
       cursor: pointer;
-      margin-left: 10px;
+      margin: 5px; /* Adjusted spacing */
       text-align: center;
-      line-height: 40px;
+      line-height: 48px;
       transition: background 0.3s ease;
     }
     #ct:hover, #hm:hover { background: #388e3c; }
-    #ct img { width: 75%; height: 75%; vertical-align: middle; }
-    #hm a { color: white; text-decoration: none; }
+    #ct img { width: 60%; height: 60%; vertical-align: middle; }
+    #hm a { color: white; text-decoration: none; display: block; }
 
-    #map { height: 400px; width: 100%; max-width: 800px; margin: 20px auto; border-radius: 10px; }
+    #map { 
+      height: 50vh; /* Use viewport height for responsiveness */
+      width: 100%; 
+      max-width: 100%; /* Remove fixed max-width */
+      margin: 20px auto; 
+      border-radius: 10px; 
+    }
 
     #controls {
       text-align: center;
-      padding: 20px;
+      padding: 15px;
       background: rgba(255, 255, 255, 0.8);
       border-radius: 10px;
-      max-width: 800px;
-      margin: 0 auto 20px;
+      margin: 0 10px 20px;
+      display: flex;
+      flex-direction: column; /* Stack controls vertically */
+      gap: 10px; /* Add spacing between elements */
     }
     #controls button, #saveBtn, #loadBtn {
-      padding: 10px 20px;
+      padding: 12px 24px; /* Larger padding for touch */
       background: #4caf50;
       border: none;
       border-radius: 10px;
       color: white;
-      font-size: 14px;
+      font-size: 16px; /* Larger font */
       cursor: pointer;
-      margin: 5px;
       transition: background 0.3s ease;
     }
     #controls button:hover, #saveBtn:hover, #loadBtn:hover { background: #388e3c; }
     #controls button:disabled { background: #a5d6a7; cursor: not-allowed; }
     #routeName, #savedRoutes {
-      padding: 8px;
+      padding: 10px;
       border: 1px solid #a5d6a7;
       border-radius: 5px;
-      margin: 5px;
       background: white;
       color: #2e7d32;
+      font-size: 16px; /* Larger font */
+      width: 100%; /* Full width on mobile */
+      box-sizing: border-box;
     }
-    #status { margin-top: 10px; color: #388e3c; font-weight: 600; }
+    #status { 
+      margin-top: 10px; 
+      color: #388e3c; 
+      font-weight: 600; 
+      font-size: 14px; 
+    }
 
     footer {
       position: fixed;
@@ -97,7 +115,33 @@
       color: white;
       text-align: center;
       padding: 10px 0;
-      font-size: 14px;
+      font-size: 16px; /* Larger font for readability */
+    }
+
+    /* Media Queries for Mobile */
+    @media (max-width: 600px) {
+      #header {
+        justify-content: center; /* Center buttons on small screens */
+        height: auto;
+        padding: 10px;
+      }
+      #ct, #hm {
+        width: 45%; /* Slightly smaller width */
+        margin: 5px;
+      }
+      #map { 
+        height: 40vh; /* Reduce height slightly on smaller screens */
+      }
+      #controls {
+        padding: 10px;
+      }
+      #controls button, #saveBtn, #loadBtn {
+        font-size: 14px; /* Slightly smaller but still legible */
+        padding: 10px 20px;
+      }
+      #status {
+        font-size: 12px; /* Adjust status text */
+      }
     }
   </style>
 </head>
@@ -132,7 +176,7 @@
   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
   <script>
     let map, routePoints = [], polyline, startMarker, currentMarker, watchId;
-    let currentLoadedRoute = null; // Variable to track the currently loaded route
+    let currentLoadedRoute = null;
     const startBtn = document.getElementById('startBtn');
     const stopBtn = document.getElementById('stopBtn');
     const routeNameInput = document.getElementById('routeName');
@@ -150,7 +194,7 @@
       stopBtn.addEventListener('click', stopWalk);
       saveBtn.addEventListener('click', saveRoute);
       loadBtn.addEventListener('click', loadRoute);
-      deleteBtn.addEventListener('click', deleteRoute); // Event listener for delete button
+      deleteBtn.addEventListener('click', deleteRoute);
     }
 
     document.addEventListener('DOMContentLoaded', listSavedRoutes);
@@ -180,7 +224,7 @@
           polyline = L.polyline(routePoints, { color: '#388e3c' }).addTo(map);
           currentMarker = L.marker(initialPoint).addTo(map);
 
-          currentLoadedRoute = null; // Reset currentLoadedRoute when starting a new walk
+          currentLoadedRoute = null;
 
           watchId = navigator.geolocation.watchPosition(
             (pos) => {
@@ -261,7 +305,7 @@
         L.marker(loadedPoints[loadedPoints.length - 1]).addTo(map).bindPopup('End');
         map.fitBounds(L.polyline(loadedPoints).getBounds());
         status.textContent = `Loaded route: ${selectedRoute}`;
-        currentLoadedRoute = selectedRoute; // Set currentLoadedRoute when loading a route
+        currentLoadedRoute = selectedRoute;
       } else {
         status.textContent = 'Failed to load route.';
       }
@@ -275,9 +319,8 @@
       }
       if (confirm(`Are you sure you want to delete the route "${selectedRoute}"?`)) {
         localStorage.removeItem(`route_${selectedRoute}`);
-        listSavedRoutes(); // Refresh the dropdown
+        listSavedRoutes();
         if (currentLoadedRoute === selectedRoute && map) {
-          // Clear the map if the deleted route is currently loaded
           map.eachLayer((layer) => {
             if (!(layer instanceof L.TileLayer)) {
               map.removeLayer(layer);
