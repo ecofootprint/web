@@ -3,32 +3,27 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script type="text/javascript" src="ble.js"></script>
   <title>e.co.footprint</title>
   <link rel="icon" type="logo" href="https://hufung17.github.io/image/logo.png">
   <!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-MT7QFLLD');</script>
-<!-- End Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-MT7QFLLD');</script>
+  <!-- End Google Tag Manager -->
   <!-- Leaflet CSS for Map -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-
   <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-BCQYBHNYVE"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-BCQYBHNYVE');
-</script>
-
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-BCQYBHNYVE"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-BCQYBHNYVE');
+  </script>
   <style>
     body {
       font-family: 'Poppins', sans-serif;
@@ -40,7 +35,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       box-sizing: border-box;
       min-height: 100vh;
     }
-
     #header {
       height: 60px;
       background: #2e7d32;
@@ -75,7 +69,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     #ct:hover, #hm:hover { background: #388e3c; }
     #ct img { width: 60%; height: 60%; vertical-align: middle; }
     #hm a { color: white; text-decoration: none; display: block; }
-
     #map { 
       height: 50vh;
       width: 100%; 
@@ -83,7 +76,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       margin: 20px auto; 
       border-radius: 10px; 
     }
-
     #controls {
       text-align: center;
       padding: 15px;
@@ -122,7 +114,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       font-weight: 600; 
       font-size: 14px; 
     }
-
+    #distanceDisplay {
+      margin-top: 10px;
+      color: #2e7d32;
+      font-weight: 600;
+      font-size: 16px;
+    }
     footer {
       position: fixed;
       bottom: 0;
@@ -133,7 +130,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       padding: 10px 0;
       font-size: 16px;
     }
-
     @media (max-width: 600px) {
       #header {
         justify-content: center;
@@ -160,7 +156,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         font-size: 14px;
         padding: 10px 20px;
       }
-      #status {
+      #status, #distanceDisplay {
         font-size: 12px;
       }
     }
@@ -168,9 +164,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </head>
 <body>
   <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MT7QFLLD"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MT7QFLLD"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T9LRD3M2" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   <div id="header">
@@ -195,6 +191,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </select>
     <button id="loadBtn">Load Route</button>
     <button id="deleteBtn">Delete Route</button>
+    <p id="distanceDisplay">Distance: 0.00 km</p>
     <p id="status">Click "Start Walk" to begin tracking your route.</p>
   </div>
 
@@ -212,6 +209,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     const loadBtn = document.getElementById('loadBtn');
     const deleteBtn = document.getElementById('deleteBtn');
     const status = document.getElementById('status');
+    const distanceDisplay = document.getElementById('distanceDisplay');
 
     if (!navigator.geolocation) {
       status.textContent = 'Geolocation is not supported by your browser.';
@@ -227,27 +225,31 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     document.addEventListener('DOMContentLoaded', listSavedRoutes);
 
     function calculateDistance(lat1, lon1, lat2, lon2) {
-        const R = 6371; // Earth's radius in kilometers
-        const dLat = (lat2 - lat1) * Math.PI / 180;
-        const dLon = (lon2 - lon1) * Math.PI / 180;
-        const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                  Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-                  Math.sin(dLon/2) * Math.sin(dLon/2);
-        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-        return R * c; // Distance in kilometers
+      const R = 6371; // Earth's radius in kilometers
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLon = (lon2 - lon1) * Math.PI / 180;
+      const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                Math.sin(dLon/2) * Math.sin(dLon/2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      return R * c; // Distance in kilometers
     }
 
     function calculateTotalDistance(points) {
-        let totalDistance = 0;
-        for (let i = 0; i < points.length - 1; i++) {
-            totalDistance += calculateDistance(
-                points[i].lat,
-                points[i].lng,
-                points[i + 1].lat,
-                points[i + 1].lng
-            );
-        }
-        return totalDistance;
+      let totalDistance = 0;
+      for (let i = 0; i < points.length - 1; i++) {
+        totalDistance += calculateDistance(
+          points[i].lat,
+          points[i].lng,
+          points[i + 1].lat,
+          points[i + 1].lng
+        );
+      }
+      return totalDistance;
+    }
+
+    function updateDistanceDisplay(distance) {
+      distanceDisplay.textContent = `Distance: ${distance.toFixed(2)} km`;
     }
 
     function startWalk() {
@@ -285,14 +287,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               currentMarker.setLatLng(newPoint);
               map.setView(newPoint);
               const distance = calculateTotalDistance(routePoints);
-              status.textContent = `Tracking your walk... Distance: ${distance.toFixed(2)} km`;
+              updateDistanceDisplay(distance);
+              status.textContent = 'Tracking your walk...';
             },
             (err) => { status.textContent = 'Unable to retrieve your location.'; },
             { enableHighAccuracy: true, maximumAge: 10000, timeout: 10000 }
           );
 
           stopBtn.disabled = false;
-          status.textContent = 'Tracking your walk... Distance: 0.00 km';
+          updateDistanceDisplay(0);
+          status.textContent = 'Tracking your walk...';
         },
         (err) => {
           status.textContent = 'Unable to retrieve your location. Please allow location access.';
@@ -314,23 +318,25 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       routeNameInput.style.display = 'inline';
       saveBtn.style.display = 'inline';
       const distance = calculateTotalDistance(routePoints);
-      status.textContent = `Walk stopped. Total Distance: ${distance.toFixed(2)} km. Enter a name and click "Save Route" to save your walk.`;
+      updateDistanceDisplay(distance);
+      status.textContent = 'Walk stopped. Enter a name and click "Save Route" to save.';
     }
 
     function saveRoute() {
-        const routeName = routeNameInput.value.trim();
-        if (!routeName) { alert('Please enter a name for the route.'); return; }
-        const totalDistance = calculateTotalDistance(routePoints);
-        const routeData = JSON.stringify({
-            points: routePoints.map(point => ({ lat: point.lat, lng: point.lng })),
-            distance: totalDistance
-        });
-        localStorage.setItem(`route_${routeName}`, routeData);
-        routeNameInput.value = '';
-        routeNameInput.style.display = 'none';
-        saveBtn.style.display = 'none';
-        status.textContent = `Route saved successfully. Distance: ${totalDistance.toFixed(2)} km`;
-        listSavedRoutes();
+      const routeName = routeNameInput.value.trim();
+      if (!routeName) { alert('Please enter a name for the route.'); return; }
+      const totalDistance = calculateTotalDistance(routePoints);
+      const routeData = JSON.stringify({
+        points: routePoints.map(point => ({ lat: point.lat, lng: point.lng })),
+        distance: totalDistance
+      });
+      localStorage.setItem(`route_${routeName}`, routeData);
+      routeNameInput.value = '';
+      routeNameInput.style.display = 'none';
+      saveBtn.style.display = 'none';
+      updateDistanceDisplay(totalDistance);
+      status.textContent = `Route "${routeName}" saved successfully.`;
+      listSavedRoutes();
     }
 
     function listSavedRoutes() {
@@ -348,27 +354,28 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     }
 
     function loadRoute() {
-        const selectedRoute = savedRoutesSelect.value;
-        if (!selectedRoute) { alert('Please select a route to load.'); return; }
-        const routeData = localStorage.getItem(`route_${selectedRoute}`);
-        if (routeData) {
-            const data = JSON.parse(routeData);
-            const loadedPoints = data.points.map(point => L.latLng(point.lat, point.lng));
-            const distance = data.distance;
-            if (map) { map.remove(); }
-            map = L.map('map').setView(loadedPoints[0], 15);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap contributors'
-            }).addTo(map);
-            L.polyline(loadedPoints, { color: '#388e3c' }).addTo(map);
-            L.marker(loadedPoints[0]).addTo(map).bindPopup('Start');
-            L.marker(loadedPoints[loadedPoints.length - 1]).addTo(map).bindPopup('End');
-            map.fitBounds(L.polyline(loadedPoints).getBounds());
-            status.textContent = `Loaded route: ${selectedRoute} - Distance: ${distance.toFixed(2)} km`;
-            currentLoadedRoute = selectedRoute;
-        } else {
-            status.textContent = 'Failed to load route.';
-        }
+      const selectedRoute = savedRoutesSelect.value;
+      if (!selectedRoute) { alert('Please select a route to load.'); return; }
+      const routeData = localStorage.getItem(`route_${selectedRoute}`);
+      if (routeData) {
+        const data = JSON.parse(routeData);
+        const loadedPoints = data.points.map(point => L.latLng(point.lat, point.lng));
+        const distance = data.distance;
+        if (map) { map.remove(); }
+        map = L.map('map').setView(loadedPoints[0], 15);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+        L.polyline(loadedPoints, { color: '#388e3c' }).addTo(map);
+        L.marker(loadedPoints[0]).addTo(map).bindPopup('Start');
+        L.marker(loadedPoints[loadedPoints.length - 1]).addTo(map).bindPopup('End');
+        map.fitBounds(L.polyline(loadedPoints).getBounds());
+        updateDistanceDisplay(distance);
+        status.textContent = `Loaded route: ${selectedRoute}`;
+        currentLoadedRoute = selectedRoute;
+      } else {
+        status.textContent = 'Failed to load route.';
+      }
     }
 
     function deleteRoute() {
@@ -387,13 +394,49 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             }
           });
           currentLoadedRoute = null;
+          updateDistanceDisplay(0);
           status.textContent = 'Route deleted and map cleared.';
         } else {
           status.textContent = 'Route deleted successfully.';
         }
       }
     }
+
+    // Bluetooth connection for ESP32
+    let device = null;
+    let server = null;
+
+    async function connect() {
+      if (!navigator.bluetooth) {
+        alert('Web Bluetooth API is not available. Please use a supported browser (e.g., Chrome) with Bluetooth enabled.');
+        status.textContent = 'Bluetooth not supported.';
+        return;
+      }
+
+      try {
+        status.textContent = 'Scanning for ESP32 devices...';
+        device = await navigator.bluetooth.requestDevice({
+          filters: [{ namePrefix: 'ESP32' }]
+          // optionalServices: ['your-service-uuid'] // Uncomment and specify if you know the service UUID
+        });
+
+        device.addEventListener('gattserverdisconnected', () => {
+          console.log('Disconnected from ESP32');
+          status.textContent = 'Disconnected from ESP32';
+          device = null;
+          server = null;
+        });
+
+        server = await device.gatt.connect();
+        console.log('Connected to ESP32');
+        status.textContent = 'Connected to ESP32';
+
+      } catch (error) {
+        console.error('Bluetooth connection error:', error);
+        status.textContent = `Failed to connect: ${error.message}`;
+      }
+    }
   </script>
+  <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'91be3a6838437ba2',t:'MTc0MTIyNjA5OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
 </body>
-</html>
 </html>
